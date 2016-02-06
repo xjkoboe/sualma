@@ -179,17 +179,17 @@ public class TokenizerTest
         {
             Tokenizer tokenizer = new Tokenizer();
         
-            String text = "$";
-            Token[] tokens = tokenizer.scan(text);
+            String text = "  $";
+            tokenizer.scan(text);
             
             fail();
         }
         catch (TokenizerError e)
         {
-            System.out.println(e);
-            assertEquals(e.getLocation().toString(), "line 1:\n$\n^\n");
+            assertEquals(0, e.getLocation().getLine());
+            assertEquals(2, e.getLocation().getColumn());
+            assertEquals("  $", e.getLocation().getLineText());
+            assertEquals("line 0:\n  $\n  ^", e.getLocation().toString());
         }
     }
-    
-    
 }

@@ -45,10 +45,10 @@ public class Tokenizer
         List<Token> tokens = new ArrayList<>();
         for (int i = 0; i < lines.length; i++)
         {
-            tokens.addAll(scanLine(lines[i], i + 1));
+            tokens.addAll(scanLine(lines[i], i));
         }
         
-        tokens.add(new Token("", Token.Type.EndOfText, new TextLocation("", lines.length + 1, 1))); // CHECKME: location ok for error output?
+        tokens.add(new Token("", Token.Type.EndOfText, new TextLocation("", lines.length, 0))); 
         
         return tokens.toArray(new Token[tokens.size()]);
     }
