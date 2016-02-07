@@ -38,7 +38,7 @@ public class Tokenizer
         patternMap.put(Token.Type.Operator, Pattern.compile("\\+|\\-|\\*|/|\\^|==|!=|<=|>=|<|>|=|,|;|\\."));
     }
 
-    public Token[] scan(String text) throws TokenizerError
+    public Token[] scan(String text) throws TokenizerException
     {
         String[] lines = text.split("\n", Integer.MAX_VALUE);
 
@@ -53,7 +53,7 @@ public class Tokenizer
         return tokens.toArray(new Token[tokens.size()]);
     }
 
-    private List<Token> scanLine(String line, int lineNumber) throws TokenizerError
+    private List<Token> scanLine(String line, int lineNumber) throws TokenizerException
     {
         text = line;
         start = 0;
@@ -80,7 +80,7 @@ public class Tokenizer
             } 
             else
             {
-                throw new TokenizerError("Unknown token", new TextLocation(line, lineNumber, start));
+                throw new TokenizerException("Unknown token", new TextLocation(line, lineNumber, start));
             }
             skipWhitespace();
         }

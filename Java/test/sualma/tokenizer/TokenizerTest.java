@@ -184,7 +184,7 @@ public class TokenizerTest
             
             fail();
         }
-        catch (TokenizerError e)
+        catch (TokenizerException e)
         {
             assertEquals(0, e.getLocation().getLine());
             assertEquals(2, e.getLocation().getColumn());
