@@ -1,7 +1,7 @@
-/**
+ /**
  * @author wijnand.schepens@gmail.com
  */
-package sualma.tokenizer;
+package sualma.parser;
 
 public class Token
 {
@@ -41,23 +41,28 @@ public class Token
         return type;
     }
 
-    public void setType(Type type)
-    {
-        this.type = type;
-    }
-
     public TextLocation getLocation()
     {
         return location;
     }
 
+    public boolean is(String text)
+    {
+        return this.text.equals(text);
+    }
+    
+    public boolean is(Token.Type type)
+    {
+        return this.type == type;
+    }
+    
     @Override
     public String toString()
     {
         return "token '" + getText() + "' (" + getType() + ")";
     }
     
-    private String       text;
-    private Type         type;
-    private TextLocation location;
+    private final String       text;
+    private final Type         type;
+    private final TextLocation location;
 }

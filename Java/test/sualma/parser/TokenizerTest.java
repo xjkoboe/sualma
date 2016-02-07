@@ -1,5 +1,8 @@
-package sualma.tokenizer;
+package sualma.parser;
 
+import sualma.parser.TokenizerException;
+import sualma.parser.Tokenizer;
+import sualma.parser.Token;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

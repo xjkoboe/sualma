@@ -1,7 +1,7 @@
 /**
  * @author wijnand.schepens@gmail.com
  */
-package sualma.tokenizer;
+package sualma.parser;
 
 public class TextLocation
 {

@@ -1,9 +1,11 @@
 /**
  * @author wijnand.schepens@gmail.com
  */
-package sualma.tokenizer;
+package sualma.parser;
 
 import sualma.BaseException;
+import sualma.BaseException;
+import sualma.parser.TextLocation;
 
 public class TextError extends BaseException
 {

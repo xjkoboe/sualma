@@ -1,7 +1,7 @@
 /**
  * @author wijnand.schepens@gmail.com
  */
-package sualma.tokenizer;
+package sualma.parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +57,7 @@ public class Tokenizer
     {
         text = line;
         start = 0;
-        lineNumber = lineNumber;
-
+        
         List<Token> tokens = new ArrayList<>();
         
         int commentStart = text.indexOf("//");
@@ -75,7 +74,7 @@ public class Tokenizer
             if (t != null)
             {
                 if (reserved.contains(t.getText()))
-                    t.setType(Token.Type.Reserved);
+                    t = new Token(t.getText(), Token.Type.Reserved);
                 tokens.add(t);
             } 
             else
