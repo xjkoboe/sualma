@@ -6,7 +6,7 @@ package sualma.model;
 /**
  * Object holding a boolean value.
  */
-public class Bool extends Obj
+public final class Bool extends Obj
 {
     public Bool(boolean value)
     {
@@ -16,6 +16,20 @@ public class Bool extends Obj
     public boolean getValue()
     {
         return value;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 5;
+        hash = 31 * hash + (this.value ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {   
+        return other instanceof Bool && ((Bool) other).value == value;
     }
     
     private final boolean value;

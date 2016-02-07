@@ -5,8 +5,9 @@ package sualma.model;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import sualma.util.ObjFactory;
 
-public class ModelTest
+public class ModelTest extends ObjFactory
 {
     @Test
     public void TestStr()
@@ -45,9 +46,9 @@ public class ModelTest
     {
         Obj name = new Name("sin");
         Obj arg = new Num("0");
-        Spec s = new Spec(name, arg);
-        assertEquals(name, s.getHead());
-        assertEquals(arg, s.getBody());
+        Call s = new Call(name, arg);
+        assertSame(name, s.getHead());
+        assertSame(arg, s.getBody());
     }
     
     @Test
@@ -60,12 +61,12 @@ public class ModelTest
         Obj el1 = new Str("abc");
         l.addElement(el1);
         assertEquals(1, l.getCount());
-        assertEquals(el1, l.getElement(0));
+        assertSame(el1, l.getElement(0));
         
         Obj el2 = new Num("123");
         l.addElement(el2);
         assertEquals(2, l.getCount());
-        assertEquals(el2, l.getElement(1));
+        assertSame(el2, l.getElement(1));
     }
     
     @Test
@@ -77,16 +78,55 @@ public class ModelTest
         el1.setLabel("name");
         l.addElement(el1);
         assertEquals(1, l.getCount());
-        assertEquals(el1, l.getElement(0));
-        assertEquals(el1, l.getElement("name"));
+        assertSame(el1, l.getElement(0));
+        assertSame(el1, l.getElement("name"));
         
         Obj el2 = new Num("123");
         el2.setLabel("age");
         l.addElement(el2);
         assertEquals(2, l.getCount());
-        assertEquals(el2, l.getElement(1));
-        assertEquals(el2, l.getElement("age"));
+        assertSame(el2, l.getElement(1));
+        assertSame(el2, l.getElement("age"));
         
         assertNull(l.getElement("foo"));
+    }
+    
+    @Test
+    public void testEquality()
+    {
+        assertNotSame(num(12), num(12));
+        assertEquals(num(12), num(12));
+        assertFalse(num(12).equals(num(34)));
+        
+        assertEquals(str("abc"), str("abc"));
+        assertFalse(str("abc").equals(str("def")));
+        
+        assertEquals(name("abc"), name("abc"));
+        assertFalse(name("abc").equals(name("def")));
+        
+        assertEquals(True, new Bool(true));
+        assertEquals(False, new Bool(false));
+        assertFalse(True.equals(False));
+        
+        assertEquals(call(name("foo"), name("bar")),
+                     call(name("foo"), name("bar")));
+        
+        assertFalse(call(name("foo"), name("bar"))
+            .equals(call(name("foofoo"), name("bar"))));
+        
+        assertFalse(call(name("foo"), name("bar"))
+            .equals(call(name("foo"), name("barbar"))));
+        
+        assertEquals(list(name("foo"), num(123)),
+                     list(name("foo"), num(123)));
+        
+        assertFalse(list(name("foo"), num(123))
+            .equals(list(name("foo"))));
+        
+        assertFalse(list(name("foo"), num(123))
+            .equals(list(name("foofoo"), num(123))));
+        
+        assertFalse(list(name("foo"), name("bar"))
+            .equals(list(name("foo"), num(456))));
     }
 }

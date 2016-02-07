@@ -4,6 +4,7 @@
 package sualma.model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Object holding a list of elements (type Obj).
@@ -11,10 +12,12 @@ import java.util.ArrayList;
  * 
  * Element lookup via index or via label (if not null).
  */
-public class List extends Obj
+public final class List extends Obj
 {
-    public List()
+    public List(Obj... elements)
     {
+        for (Obj el: elements)
+            addElement(el);
     }
  
     public int getCount()
@@ -46,6 +49,31 @@ public class List extends Obj
         }
         return null; // TODO: better exception handling
     }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.elements);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {   
+        if (!(other instanceof List))
+            return false;
+        List otherList = (List)other;
+        if (getCount() != otherList.getCount())
+            return false;
+        for (int i = 0; i < getCount(); ++i)
+        {
+            if (!getElement(i).equals(otherList.getElement(i)))
+                return false;
+        }
+        return true;
+    }
+ 
 
     private final ArrayList<Obj> elements = new ArrayList<>(); 
     // TODO: consider other container(s) for more efficient label lookup
