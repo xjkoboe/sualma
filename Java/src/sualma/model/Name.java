@@ -3,16 +3,15 @@
  */
 package sualma.model;
 
+/**
+ * Object holding a name value.
+ * 
+ * A name can be used to refer to a list element (with label==name).
+ */
 public class Name extends Obj
 {
     public Name(String value)
     {
-        this.value = value;
-    }
-
-    public Name(String label, String value)
-    {
-        super(label);
         this.value = value;
     }
 
@@ -21,5 +20,5 @@ public class Name extends Obj
         return value;
     }
     
-    private String value;
+    private final String value;
 }

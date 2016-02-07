@@ -3,16 +3,16 @@
  */
 package sualma.model;
 
+/**
+ * Object holding a numeric value.
+ * 
+ * Note: the value is stored as a string. 
+ * This may change when the type system is expanded...
+ */
 public class Num extends Obj
 {
     public Num(String value)
     {
-        this.value = value;
-    }
-
-    public Num(String label, String value)
-    {
-        super(label);
         this.value = value;
     }
 
@@ -21,5 +21,5 @@ public class Num extends Obj
         return value;
     }
     
-    private String value;
+    private final String value;
 }

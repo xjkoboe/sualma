@@ -14,10 +14,6 @@ public class ModelTest
         Str s1 = new Str("abc");
         assertEquals("abc", s1.getValue());
         assertNull(s1.getLabel());
-        
-        Str s2 = new Str("s", "abc");
-        assertEquals("abc", s2.getValue());
-        assertEquals("s", s2.getLabel());
     }
 
     @Test
@@ -26,10 +22,6 @@ public class ModelTest
         Num n1 = new Num("123");
         assertEquals("123", n1.getValue());
         assertNull(n1.getLabel());
-        
-        Num n2 = new Num("n", "123");
-        assertEquals("123", n2.getValue());
-        assertEquals("n", n2.getLabel());
     }
     
     @Test
@@ -38,10 +30,6 @@ public class ModelTest
         Bool b1 = new Bool(false);
         assertEquals(false, b1.getValue());
         assertNull(b1.getLabel());
-        
-        Bool b2 = new Bool("b", false);
-        assertEquals(false, b2.getValue());
-        assertEquals("b", b2.getLabel());
     }
 
     @Test
@@ -50,10 +38,16 @@ public class ModelTest
         Name n1 = new Name("abc");
         assertEquals("abc", n1.getValue());
         assertNull(n1.getLabel());
-        
-        Name n2 = new Name("n", "abc");
-        assertEquals("abc", n2.getValue());
-        assertEquals("n", n2.getLabel());
+    }
+    
+    @Test
+    public void TestSpec()
+    {
+        Obj name = new Name("sin");
+        Obj arg = new Num("0");
+        Spec s = new Spec(name, arg);
+        assertEquals(name, s.getHead());
+        assertEquals(arg, s.getBody());
     }
     
     @Test
@@ -79,16 +73,20 @@ public class ModelTest
     {
         List l = new List();
         
-        Obj el1 = new Str("name", "John");
+        Obj el1 = new Str("John");
+        el1.setLabel("name");
         l.addElement(el1);
         assertEquals(1, l.getCount());
         assertEquals(el1, l.getElement(0));
         assertEquals(el1, l.getElement("name"));
         
-        Obj el2 = new Num("age", "123");
+        Obj el2 = new Num("123");
+        el2.setLabel("age");
         l.addElement(el2);
         assertEquals(2, l.getCount());
         assertEquals(el2, l.getElement(1));
         assertEquals(el2, l.getElement("age"));
+        
+        assertNull(l.getElement("foo"));
     }
 }

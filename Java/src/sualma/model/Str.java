@@ -3,16 +3,13 @@
  */
 package sualma.model;
 
+/**
+ * Object holding a string value.
+ */
 public class Str extends Obj
 {
     public Str(String value)
     {
-        this.value = value;
-    }
-
-    public Str(String label, String value)
-    {
-        super(label);
         this.value = value;
     }
 
@@ -21,5 +18,5 @@ public class Str extends Obj
         return value;
     }
     
-    private String value;
+    private final String value;
 }

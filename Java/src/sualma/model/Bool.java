@@ -3,16 +3,13 @@
  */
 package sualma.model;
 
+/**
+ * Object holding a boolean value.
+ */
 public class Bool extends Obj
 {
     public Bool(boolean value)
     {
-        this.value = value;
-    }
-
-    public Bool(String label, boolean value)
-    {
-        super(label);
         this.value = value;
     }
 
@@ -21,5 +18,5 @@ public class Bool extends Obj
         return value;
     }
     
-    private boolean value;
+    private final boolean value;
 }

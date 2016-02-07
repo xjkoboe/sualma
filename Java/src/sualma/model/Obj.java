@@ -13,15 +13,15 @@ public class Obj
         this.label = null;
     }
 
-    public Obj(String label)
-    {
-        this.label = label;
-    }
-
     public String getLabel()
     {
         return label;
     }
+
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
     
-    private String label;
+    private String label; // TODO: consider making final (pass through ctor)
 }
