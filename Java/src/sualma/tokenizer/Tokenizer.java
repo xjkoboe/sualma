@@ -1,3 +1,6 @@
+/**
+ * @author wijnand.schepens@gmail.com
+ */
 package sualma.tokenizer;
 
 import java.util.ArrayList;
@@ -10,9 +13,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author wijnand.schepens@gmail.com
- */
 public class Tokenizer
 {
     private final Pattern whitespacePattern;

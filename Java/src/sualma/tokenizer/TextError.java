@@ -1,10 +1,10 @@
+/**
+ * @author wijnand.schepens@gmail.com
+ */
 package sualma.tokenizer;
 
 import sualma.BaseException;
 
-/**
- * @author wijnand.schepens@gmail.com
- */
 public class TextError extends BaseException
 {
     public TextError(String msg, TextLocation location)

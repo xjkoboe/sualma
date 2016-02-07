@@ -1,8 +1,8 @@
-package sualma.tokenizer;
-
 /**
  * @author wijnand.schepens@gmail.com
  */
+package sualma.tokenizer;
+
 public class Token
 {
     public enum Type
