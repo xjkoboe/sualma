@@ -61,7 +61,7 @@ public final class Call extends Obj
     @Override
     public String toString()
     {
-        return "(" + head + " " + body + ")";
+        return "( " + head + " " + body + " )";
     }
     
     private final Obj head;

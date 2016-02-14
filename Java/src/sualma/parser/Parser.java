@@ -3,17 +3,22 @@
  */
 package sualma.parser;
 
+import sualma.model.Bool;
 import sualma.model.List;
 import sualma.model.Name;
 import sualma.model.Num;
 import sualma.model.Obj;
 import sualma.model.Call;
+import sualma.model.Str;
 
+/**
+ * A Parser can be used to convert a string representation to a sualma object.
+ */
 public class Parser
 {
     public Parser()
     {
-        tokenizer = new Tokenizer(); // TODO: reserved words...
+        tokenizer = new Tokenizer("true", "false"); // TODO: reserved words...
     }
     
     public Obj parse(String text)
@@ -94,15 +99,17 @@ public class Parser
         Token token = eat();
         assert(!token.is(Token.Type.Indent));
         
+        if (token.is("true"))
+            return new Bool(true);
+        if (token.is("false"))
+            return new Bool(false);
         if (token.is(Token.Type.Name))
-        {
             return new Name(token.getText());
-        }
-        else if (token.is(Token.Type.Number))
-        {
+        if (token.is(Token.Type.Number))
             return new Num(token.getText());
-        }
-        else if (token.is("("))
+        if (token.is(Token.Type.String))
+            return new Str(token.getText().substring(1, token.getText().length()-1));
+        if (token.is("("))
         {
             Obj res = next().is(")") ? new List() : parseObj(-1);
             consume(")");

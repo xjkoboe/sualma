@@ -43,6 +43,22 @@ public class ParserTest extends ObjFactory
     }
     
     @Test
+    public void testBool()
+    {
+        Obj res = p.parse(" true ");
+        
+        assertEquals(True, res);
+    }
+    
+    @Test
+    public void testStr()
+    {
+        Obj res = p.parse(" \"abc\" ");
+        
+        assertEquals(str("abc"), res);
+    }
+    
+    @Test
     public void testCall1()
     {
         Obj res = p.parse("abc 123\n");
