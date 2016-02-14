@@ -37,6 +37,12 @@ public final class Num extends Obj
     {   
         return other instanceof Num && ((Num) other).value.equals(value);
     }
+
+    @Override
+    public String toString()
+    {
+        return value;
+    }
     
     private final String value;
 }

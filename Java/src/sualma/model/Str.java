@@ -34,6 +34,12 @@ public final class Str extends Obj
     {   
         return other instanceof Str && ((Str) other).value.equals(value);
     }
+
+    @Override
+    public String toString()
+    {
+        return value;
+    }
     
     private final String value;
 }

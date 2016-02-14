@@ -57,6 +57,12 @@ public final class Call extends Obj
             && ((Call) other).head.equals(head) 
             && ((Call) other).body.equals(body);
     }
+
+    @Override
+    public String toString()
+    {
+        return "(" + head + " " + body + ")";
+    }
     
     private final Obj head;
     private final Obj body;

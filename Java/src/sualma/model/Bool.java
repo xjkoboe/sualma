@@ -31,6 +31,12 @@ public final class Bool extends Obj
     {   
         return other instanceof Bool && ((Bool) other).value == value;
     }
+
+    @Override
+    public String toString()
+    {
+        return value ? "true" : "false";
+    }
     
     private final boolean value;
 }

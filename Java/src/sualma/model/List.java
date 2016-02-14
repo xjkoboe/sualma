@@ -73,8 +73,27 @@ public final class List extends Obj
         }
         return true;
     }
- 
 
+    @Override
+    public String toString()
+    {
+        String res = "(";
+        
+        if (!elements.isEmpty())
+            res += elements.get(0);
+        
+        if (elements.size() == 1)
+            res += ", ";
+        else
+        {
+            for (int i = 1; i < elements.size(); ++i)
+                res += ", " + elements.get(i);
+        }
+        
+        return res + ")";
+    }
+
+    
     private final ArrayList<Obj> elements = new ArrayList<>(); 
     // TODO: consider other container(s) for more efficient label lookup
 }
