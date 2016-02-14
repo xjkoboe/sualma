@@ -4,18 +4,16 @@
 package sualma.parser;
 
 import sualma.BaseException;
-import sualma.BaseException;
-import sualma.parser.TextLocation;
 
-public class TextError extends BaseException
+public class TextException extends BaseException
 {
-    public TextError(String msg, TextLocation location)
+    public TextException(String msg, TextLocation location)
     {
         super(msg);
         this.location = location;
     }
 
-    public TextError(Throwable cause, TextLocation location)
+    public TextException(Throwable cause, TextLocation location)
     {
         super(cause);
         this.location = location;
@@ -32,5 +30,5 @@ public class TextError extends BaseException
         return super.getMessage() + " at " + location;
     }
 
-    private TextLocation location;
+    private final TextLocation location;
 }

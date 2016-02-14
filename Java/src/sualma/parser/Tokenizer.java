@@ -66,7 +66,9 @@ public class Tokenizer
         
         while (start < text.length() && text.charAt(start) == ' ')
             start++;
-        tokens.add(new Token(text.substring(0, start), Token.Type.LeadingSpaces));
+        if (start == text.length())
+            return tokens; // skip lines which only contain whitespace and/or comment
+        tokens.add(new Token(text.substring(0, start), Token.Type.Indent));
         
         while (start < text.length())
         {

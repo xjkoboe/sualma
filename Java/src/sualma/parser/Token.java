@@ -7,7 +7,7 @@ public class Token
 {
     public enum Type
     {
-        LeadingSpaces,
+        Indent,
 		Reserved,
         Number,
         String, 

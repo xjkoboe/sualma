@@ -3,7 +3,7 @@
  */
 package sualma.parser;
 
-public class TokenizerException extends TextError
+public class TokenizerException extends TextException
 {
     public TokenizerException(String msg, TextLocation location)
     {
