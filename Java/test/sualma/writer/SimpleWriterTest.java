@@ -3,21 +3,26 @@ package sualma.writer;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import sualma.model.*;
+import sualma.parser.Parser;
 import sualma.util.ObjFactory;
 
 /**
  * @author wijnand.schepens@gmail.com
  */
-public class WriterTest extends ObjFactory
+public class SimpleWriterTest extends ObjFactory
 {
+    Parser parser = new Parser();
+ 
     @Test
     public void TestNum()
     {
         Obj obj = num(123);
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("123", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
 
     @Test
@@ -25,9 +30,11 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = name("abc");
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("abc", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
 
    
@@ -36,9 +43,11 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = True;
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("true", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
    
     @Test
@@ -46,9 +55,11 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = str("abc");
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("\"abc\"", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
    
     @Test
@@ -56,9 +67,11 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = list();
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("()", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
 
     @Test
@@ -66,7 +79,7 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = list(num(123));
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("( 123, )", text);
     }
@@ -76,9 +89,11 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = list(num(123), name("abc"));
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("( 123, abc )", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
 
     @Test
@@ -86,9 +101,11 @@ public class WriterTest extends ObjFactory
     {
         Obj obj = call(name("f"), num(123));
         
-        String text = Writer.write(obj);
+        String text = SimpleWriter.toString(obj);
         
         assertEquals("( f 123 )", text);
+        
+        assertEquals(obj, parser.parse(text)); // roundtrip
     }
     
 }

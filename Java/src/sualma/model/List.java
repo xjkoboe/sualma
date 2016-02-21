@@ -4,6 +4,8 @@
 package sualma.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -50,6 +52,11 @@ public final class List extends Obj
         return null; // TODO: better exception handling
     }
 
+    public Collection<Obj> getElements()
+    {
+        return Collections.unmodifiableList(elements);
+    }
+    
     @Override
     public int hashCode()
     {

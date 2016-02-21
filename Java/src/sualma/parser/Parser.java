@@ -35,27 +35,34 @@ public class Parser
     
     public Obj parseObj(int precedence)
     {
-        int ls = 1000000; 
+        int ls = Integer.MAX_VALUE; 
         while (next().is(Token.Type.Indent))
             ls = getPrecedence(eat());
         
-        int lastPrec = Integer.MAX_VALUE; 
-       
         Obj res = parsePre();
+        if (res == null)
+            return null;
         
+        int lastPrec = Integer.MAX_VALUE; 
         int nextPrec = getPrecedence(next());
         while (nextPrec > precedence)
         {
             if (nextPrec >= 300) // call
             {
-                res = new Call(res, parseObj(nextPrec - 1)); // call is right assoc
+                Obj obj2 = parseObj(nextPrec - 1); // call is right assoc
+                if (obj2 == null)
+                    throw new ParserException("Expected tail object", next()); // TODO: location
+                res = new Call(res, obj2);
             }
             else if (nextPrec >= 200) // + *
             {
                 Token t = eat();
                 int pr = isRightAssociative(t) ? nextPrec - 1 : nextPrec;
+                Obj obj2 = parseObj(pr);
+                if (obj2 == null)
+                    throw new ParserException("Expected second argument", next());
                 res = new Call(new Name(t.getText()), 
-                               new List().addElement(res).addElement(parseObj(pr)));
+                               new List().addElement(res).addElement(obj2)); // TODO: location
             }
             else if (nextPrec >= 100) // ; ,
             {
@@ -64,8 +71,9 @@ public class Parser
                 assert(nextPrec <= lastPrec);
                 if (nextPrec != lastPrec)
                     res = new List().addElement(res);
-                if (!next().is(")"))
-                    ((List)res).addElement(parseObj(nextPrec));
+                Obj obj2 = parseObj(nextPrec);
+                if (obj2 != null)
+                    ((List)res).addElement(obj2);
                 lastPrec = nextPrec;
             }
             else // ls
@@ -74,18 +82,25 @@ public class Parser
                 if (nextPrec > ls)
                 {
                     // call
-                    res = new Call(res, parseObj(nextPrec - 1));
+                    Obj obj2 = parseObj(nextPrec - 1);
+                    if (obj2 != null)
+                        res = new Call(res, obj2);
+                    // else ?
                 }
                 else if (nextPrec == ls)
                 {
                     // add to list
                     if (ls < lastPrec)
                         res = new List().addElement(res);
-                    ((List)res).addElement(parseObj(nextPrec));
+                    Obj obj2 = parseObj(nextPrec);
+                    if (obj2 != null)
+                        ((List)res).addElement(obj2);
+                    // else ?
                     lastPrec = ls;
                 }
                 else
-                    throw new ParserException("Unexpected lower indent", next());
+                    return res;
+                //throw new ParserException("Unexpected lower indent", next());
             }
             
             nextPrec = getPrecedence(next());
@@ -96,28 +111,49 @@ public class Parser
     
     private Obj parsePre()
     {
-        Token token = eat();
-        assert(!token.is(Token.Type.Indent));
+        assert(!next().is(Token.Type.Indent));
         
-        if (token.is("true"))
-            return new Bool(true);
-        if (token.is("false"))
-            return new Bool(false);
-        if (token.is(Token.Type.Name))
-            return new Name(token.getText());
-        if (token.is(Token.Type.Number))
-            return new Num(token.getText());
-        if (token.is(Token.Type.String))
-            return new Str(token.getText().substring(1, token.getText().length()-1));
-        if (token.is("("))
+        if (next().is("true"))
         {
-            Obj res = next().is(")") ? new List() : parseObj(-1);
-            consume(")");
+            eat();
+            return new Bool(true);
+        }
+        if (next().is("false"))
+        {
+            eat();
+            return new Bool(false);
+        }
+        if (next().is(Token.Type.Name))
+        {
+            Token token = eat();
+            return new Name(token.getText());
+        }
+        if (next().is(Token.Type.Number))
+        {
+            Token token = eat();
+            return new Num(token.getText());
+        }
+        if (next().is(Token.Type.String))
+        {
+            Token token = eat();
+            return new Str(token.getText().substring(1, token.getText().length()-1));
+        }
+        if (next().is("("))
+        {
+            Token token = eat();
+            //Obj res = next().is(")") ? new List() : parseObj(-1); // TODO: allow indent before ')'
+            Obj obj2 = parseObj(-1);
+            Obj res = obj2 != null ? obj2 : new List();
+            // check next indent is same as initial?
+            while (next().is(Token.Type.Indent))
+                eat();
+            eat(")");
             return res;
         }
-        if (token.is(Token.Type.EndOfText))
-            throw new ParserException("parsePre: unexpected end of file", token);
-        throw new ParserException("parsePre: unexpected token", token);
+        return null;
+//        if (token.is(Token.Type.EndOfText))
+//            throw new ParserException("parsePre: unexpected end of file", token);
+//        throw new ParserException("parsePre: unexpected token", token);
     }
     
     private int getPrecedence(Token token)
@@ -145,7 +181,7 @@ public class Parser
         return token.is("^");
     }
     
-    protected Token consume(String expected)
+    protected Token eat(String expected)
     {
         if (!next().is(expected))
             throw new RuntimeException("Expected token " + expected 

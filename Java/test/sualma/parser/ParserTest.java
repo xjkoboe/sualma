@@ -116,6 +116,14 @@ public class ParserTest extends ObjFactory
     }
 
     @Test
+    public void testBrackets3()
+    {
+        Obj res = p.parse("(\n  a\n)");
+        
+        assertEquals(name("a"), res);
+    }
+
+    @Test
     public void testList0()
     {
         Obj res = p.parse("()");
@@ -155,6 +163,42 @@ public class ParserTest extends ObjFactory
         assertEquals(list(list(name("a"), name("b")),
                           name("c"), 
                           list(name("d"), name("e"))), res);
+    }
+
+    @Test
+    public void testList5a()
+    {
+        Obj res = p.parse("(), a");
+        
+        assertEquals(list(list(),
+                          name("a")), res);
+    }
+
+    @Test
+    public void testList5b()
+    {
+        Obj res = p.parse("(a, b), c");
+        
+        assertEquals(list(list(name("a"), name("b")),
+                          name("c")), res);
+    }
+
+    @Test
+    public void testList6()
+    {
+        Obj res = p.parse("a, (b,  c)");
+        
+        assertEquals(list(name("a"), 
+                          list(name("b"), name("c"))), res);
+    }
+
+    @Test
+    public void testList7()
+    {
+        Obj res = p.parse("(a, b), (c,  d)");
+        
+        assertEquals(list(list(name("a"), name("b")),
+                          list(name("c"), name("d"))), res);
     }
 
     @Test
@@ -273,5 +317,25 @@ public class ParserTest extends ObjFactory
                           list(name("a"),
                                name("b"))), res);
     }
+
+    @Test
+    public void testMixed6()
+    {
+        Obj res = p.parse("a, b\nc");
+        
+        assertEquals(list(list(name("a"), name("b")),
+                          name("c")), res);
+    }
+
+    @Test
+    public void testMixed7()
+    {
+        Obj res = p.parse("(a, b)\nc");
+        
+        assertEquals(list(list(name("a"), name("b")),
+                          name("c")), res);
+    }
+
+
 }
         
