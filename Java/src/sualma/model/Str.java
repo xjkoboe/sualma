@@ -38,7 +38,7 @@ public final class Str extends Obj
     @Override
     public String toString()
     {
-        return "\"" + value + "\"";
+        return super.toString() + "\"" + value + "\"";
     }
     
     private final String value;

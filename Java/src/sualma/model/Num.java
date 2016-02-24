@@ -41,7 +41,7 @@ public final class Num extends Obj
     @Override
     public String toString()
     {
-        return value;
+        return super.toString() + value;
     }
     
     private final String value;

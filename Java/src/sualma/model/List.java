@@ -85,15 +85,15 @@ public final class List extends Obj
     public String toString()
     {
         if (elements.isEmpty())
-            return "()";
+            return super.toString() + "()";
         
         if (elements.size() == 1)
-            return "( " + elements.get(0) + ", )";
+            return super.toString() + "( " + elements.get(0) + ", )";
         
         String res = "( " + elements.get(0);
         for (int i = 1; i < elements.size(); ++i)
             res += ", " + elements.get(i);
-        return res + " )";
+        return super.toString() + res + " )";
     }
 
     

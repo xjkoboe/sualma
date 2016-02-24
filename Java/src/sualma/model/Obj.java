@@ -22,6 +22,12 @@ public class Obj
     {
         this.label = label;
     }
+
+    @Override
+    public String toString()
+    {
+        return label == null ? "" : label + "=";
+    }
     
     private String label; // TODO: consider making final (pass through ctor)
 }

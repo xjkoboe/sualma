@@ -33,7 +33,7 @@ public class Parser
         return parseObj(-1);
     }
     
-    public Obj parseObj(int precedence)
+    private Obj parseObj(int precedence)
     {
         int ls = Integer.MAX_VALUE; 
         while (next().is(Token.Type.Indent))
@@ -47,22 +47,36 @@ public class Parser
         int nextPrec = getPrecedence(next());
         while (nextPrec > precedence)
         {
-            if (nextPrec >= 300) // call
+            if (nextPrec >= 500) // .
             {
-                Obj obj2 = parseObj(nextPrec - 1); // call is right assoc
+                // TODO
+            }
+            else if (nextPrec >= 400) // call
+            {
+                Obj obj2 = parseObj(nextPrec); // call is left assoc., mainly because also used as list indexing
                 if (obj2 == null)
                     throw new ParserException("Expected tail object", next()); // TODO: location
                 res = new Call(res, obj2);
             }
-            else if (nextPrec >= 200) // + *
+            else if (nextPrec >= 200) // + - * / ^ =
             {
                 Token t = eat();
                 int pr = isRightAssociative(t) ? nextPrec - 1 : nextPrec;
                 Obj obj2 = parseObj(pr);
                 if (obj2 == null)
                     throw new ParserException("Expected second argument", next());
-                res = new Call(new Name(t.getText()), 
-                               new List().addElement(res).addElement(obj2)); // TODO: location
+                if (t.is("="))
+                {
+                    if (!(res instanceof Name))
+                        throw new ParserException("Expected name before '='", t); // TODO: location
+                    if (res.getLabel() != null)
+                        throw new ParserException("Object is already named", t); // TODO: location; maybe move to semantic
+                    obj2.setLabel(((Name)res).getValue());
+                    res = obj2;
+                }
+                else
+                    res = new Call(new Name(t.getText()), 
+                                   new List().addElement(res).addElement(obj2)); // TODO: location
             }
             else if (nextPrec >= 100) // ; ,
             {
@@ -158,22 +172,25 @@ public class Parser
     
     private int getPrecedence(Token token)
     {
+        if (token.is(Token.Type.EndOfText) || token.is(")"))
+            return -1;
         if (token.getType() == Token.Type.Indent)
             return token.getText().length();
-        else if (token.is(";"))
+        if (token.is(";"))
             return 100;
-        else if (token.is(","))
+        if (token.is(","))
             return 101;
-        else if (token.is("+") || token.is("-"))
+        if (token.is("="))
             return 200;
-        else if (token.is("*") || token.is("/"))
-            return 201;
-        else if (token.is("^"))
-            return 202;
-        else if (token.is(Token.Type.EndOfText) || token.is(")"))
-            return -1;
-        else
-            return 300;
+        if (token.is("+") || token.is("-"))
+            return 210;
+        if (token.is("*") || token.is("/"))
+            return 211;
+        if (token.is("^"))
+            return 212;
+        if (token.is("."))
+            return 500;
+        return 400; // call
     }
     
     private boolean isRightAssociative(Token token)
@@ -181,7 +198,7 @@ public class Parser
         return token.is("^");
     }
     
-    protected Token eat(String expected)
+    private Token eat(String expected)
     {
         if (!next().is(expected))
             throw new RuntimeException("Expected token " + expected 
@@ -189,12 +206,12 @@ public class Parser
         return eat();
     }
     
-    protected Token eat()
+    private Token eat()
     {
         return tokens[currIndex++];
     }
 
-    protected Token next() // look ahead
+    private Token next() // look ahead
     {
         return tokens[currIndex];
     }    

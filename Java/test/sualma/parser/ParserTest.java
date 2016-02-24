@@ -71,9 +71,9 @@ public class ParserTest extends ObjFactory
     {
         Obj res = p.parse("a b c\n");
         
-        assertEquals(call(name("a"), 
-                          call(name("b"),
-                               name("c"))), res);
+        assertEquals(call(call(name("a"), 
+                               name("b")),
+                          name("c")), res);
     }
 
     @Test
@@ -123,6 +123,42 @@ public class ParserTest extends ObjFactory
         assertEquals(name("a"), res);
     }
 
+    @Test
+    public void testAssignment1()
+    {
+        Obj res = p.parse("a = 10");
+        
+        assertEquals(num("a", 10), res);
+    }
+  
+    @Test(expected = ParserException.class)
+    public void testAssignment2()
+    {
+        p.parse("1 = 2");
+    }
+  
+    @Test(expected = ParserException.class)
+    public void testAssignment3()
+    {
+        p.parse("a = b = 2");
+    }
+    
+    public void testAssignment4()
+    {
+        Obj res = p.parse("a = (1, 2), b = 3");
+        
+        assertEquals(list(list("a", num(1), num(2)), 
+                          num("b", 3)), res);
+    }
+  
+    public void testAssignment5()
+    {
+        Obj res = p.parse("a = 1 + 2");
+        
+        assertEquals(list("a", call(name("+"), 
+                                    list(num(1), num(2)))), res);
+    }
+  
     @Test
     public void testList0()
     {
@@ -334,8 +370,6 @@ public class ParserTest extends ObjFactory
         
         assertEquals(list(list(name("a"), name("b")),
                           name("c")), res);
-    }
-
-
+    }   
 }
         

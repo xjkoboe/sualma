@@ -35,7 +35,7 @@ public final class Bool extends Obj
     @Override
     public String toString()
     {
-        return value ? "true" : "false";
+        return super.toString() + (value ? "true" : "false");
     }
     
     private final boolean value;
