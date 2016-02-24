@@ -183,11 +183,11 @@ public class Parser
         if (token.is("="))
             return 200;
         if (token.is("+") || token.is("-"))
-            return 210;
+            return 300;
         if (token.is("*") || token.is("/"))
-            return 211;
+            return 310;
         if (token.is("^"))
-            return 212;
+            return 320;
         if (token.is("."))
             return 500;
         return 400; // call
